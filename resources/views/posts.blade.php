@@ -6,8 +6,7 @@
                 {{ $post->title }}
             </a>
         </h1>
-        <p> {{date('j F, Y', strtotime($post->date))  }}</p>
         <p>{{ $post->excerpt }}</p>
     </article>
-    @endforeach;
+    @endforeach
 </x-layout>

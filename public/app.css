@@ -17,3 +17,7 @@ article {
 .bg-blue {
     background-color: #f4f4f4;
 }
+
+p {
+    line-height: 1.8rem;
+}
