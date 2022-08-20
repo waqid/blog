@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 
@@ -17,8 +19,13 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 */
 
 Route::get('/', function () {
+    // track N+1 problems
+    \Illuminate\Support\Facades\DB::listen(function ($query) {
+        logger($query->sql, $query->bindings);
+    });
+
     return view('posts', [
-        'posts' => Post::all()
+        'posts' => Post::with('category')->get()
     ]);
 });
 
@@ -31,5 +38,10 @@ Route::get('posts/{post:slug}', function (Post $post) {
 Route::get('categories/{category:slug}', function (Category $category) {
     return view('posts', [
         'posts' => $category->posts
+    ]);
+});
+Route::get('users/{user}', function (User $user) {
+    return view('posts', [
+        'posts' => $user->posts
     ]);
 });
