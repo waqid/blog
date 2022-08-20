@@ -12,16 +12,20 @@ class Post extends Model
     //protected $fillable = ['title', 'excerpt', 'body'];
     protected $guarded = [];
 
+    protected $with = ['category', 'author'];
+
     // alternative implementation post/{post:slug} on route
     // public function getRouteKeyName() {
     //     return 'slug';
     // }
 
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

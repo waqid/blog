@@ -25,7 +25,7 @@ Route::get('/', function () {
     });
 
     return view('posts', [
-        'posts' => Post::with('category')->get()
+        'posts' => Post::latest('created_at')->get()
     ]);
 });
 
@@ -37,11 +37,17 @@ Route::get('posts/{post:slug}', function (Post $post) {
 
 Route::get('categories/{category:slug}', function (Category $category) {
     return view('posts', [
+        // 'posts' => Post::latest('created_at')->with('category', 'author')
+        //     ->where('category_id', '=', $category->id)->get()
+
         'posts' => $category->posts
     ]);
 });
-Route::get('users/{user}', function (User $user) {
+Route::get('authors/{author:username}', function (User $author) {
     return view('posts', [
-        'posts' => $user->posts
+        // 'posts' => Post::latest('created_at')->with('category', 'author')
+        //     ->where('user_id', '=', $author->id)->get()
+
+        'posts' => $author->posts
     ]);
 });
