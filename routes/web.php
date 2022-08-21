@@ -25,7 +25,8 @@ Route::get('/', function () {
     });
 
     return view('posts', [
-        'posts' => Post::latest('created_at')->get()
+        'posts' => Post::latest('created_at')->get(),
+        'categories' => Category::all()
     ]);
 });
 
@@ -37,10 +38,9 @@ Route::get('posts/{post:slug}', function (Post $post) {
 
 Route::get('categories/{category:slug}', function (Category $category) {
     return view('posts', [
-        // 'posts' => Post::latest('created_at')->with('category', 'author')
-        //     ->where('category_id', '=', $category->id)->get()
-
-        'posts' => $category->posts
+        'posts' => $category->posts,
+        'currentCategory' => $category,
+        'categories' => Category::all()
     ]);
 });
 Route::get('authors/{author:username}', function (User $author) {
@@ -48,6 +48,7 @@ Route::get('authors/{author:username}', function (User $author) {
         // 'posts' => Post::latest('created_at')->with('category', 'author')
         //     ->where('user_id', '=', $author->id)->get()
 
-        'posts' => $author->posts
+        'posts' => $author->posts,
+        'categories' => Category::all()
     ]);
 });
