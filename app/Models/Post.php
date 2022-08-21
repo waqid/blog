@@ -14,10 +14,16 @@ class Post extends Model
 
     protected $with = ['category', 'author'];
 
-    // alternative implementation post/{post:slug} on route
-    // public function getRouteKeyName() {
-    //     return 'slug';
-    // }
+    public function scopeFilter($query, array $filters) // Post::newQuery()->filter()
+    {
+        $query->when($filters['search'] ?? false, function ($query, $search) {
+            $query->where('title', 'like', '%' . $search . '%')
+                ->orWhere('body', 'like', '%' . $search . '%')
+                ->orWhere('slug', 'like', '%' . $search . '%');
+        });
+        if ($filters['search'] ?? false) {
+        }
+    }
 
     public function category()
     {
