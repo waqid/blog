@@ -19,13 +19,18 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 */
 
 Route::get('/', function () {
-    // track N+1 problems
-    \Illuminate\Support\Facades\DB::listen(function ($query) {
-        logger($query->sql, $query->bindings);
-    });
+
+    $posts = Post::latest();
+
+    if (request('search')) {
+        // dd(request('search'));
+        $posts->where('title', 'like', '%' . request('search') . '%')
+            ->orWhere('body', 'like', '%' . request('search') . '%')
+            ->orWhere('slug', 'like', '%' . request('search') . '%');
+    }
 
     return view('posts', [
-        'posts' => Post::latest('created_at')->get(),
+        'posts' => $posts->get(),
         'categories' => Category::all()
     ]);
 })->name('home');
